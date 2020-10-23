@@ -1,0 +1,36 @@
+Oct 18, 2020
+[Fixes]
+- Fixed the time gap between notification being recieved about the task and task actually becoming available, by moving the step to send out the notification to the worker process. This results in the notifications arriving slightly slower - but now once the notification is recieved, the task is always ready.
+
+Sept 25, 2020
+[New functionaity]
+- Approval initiators or Administrators will now be able to cancel running workflow instances.
+- This functionality required the following changes:
+	+ 'Approval Instances' list was set up in the Approvals Registry site to keep track of active approvals
+	+ Additional columns were created in the source library as well as in the Approval Tasks list to enable seamless tracking of the relationship between the tasks and the workflow instance record.
+- Deploy-SPOApprovalLists.ps1 has been renamed to ConfigureApprovals-SPOLibrary.ps1. This script is designed to be executed against a specific document library, which would set up the library for Approvals (as well as the site, if this is a first Approvals-enabled library).
+- "Update task Author and Editor" flow has been renamed to "Approval worker", since its scope grew way past simply modifying Author and Editor fields
+
+Sept 18, 2020
+[Fixes]
+- Approvals app. Implemented graceful handling of "task not found" scenario.
+- Approvals app. Implemented refresh and back buttons on various screens as appropriate.
+- Approval History list. "Task created" event is now being recorded.
+- Approval History list. Updated to include user-friendly Approval description.
+- Modified Create-ApprovalsRegistrySite.ps1 to grant "Everyone except external users" Read permissions over Registry site.
+
+[New functionality]
+- Added scheduled flow to trigger daily and clean up Approval History lists by deleting workflow history entries older than 60 days.
+
+Sept 8, 2020
+[Fixes]
+- Now the workflow will not allow starting a new approval process while there is one already running.
+- Fixed an issue with CurrentJSON not being updates in case approval is reassigned (which caused re-assigned task to get "stuck" in CurrentJSON, so the workflow would never complete)
+- Re-factored functionality where each approver is added to the Approval Registry list
+
+[New functionality] 
+- Approval flow will set ApprovalOutcome and provide ApprovalSummary (via email and in the source library) once Approval is complete.
+
+
+Sept 1, 2020 
+- Initial release
