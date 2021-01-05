@@ -1,3 +1,8 @@
+Nov 27, 2020
+[Fixes]
+- Fixed a potential race condition bug, where two approval tasks submitted by two approvers at the same time would start overwriting each other's changes to the currentStateJSON value of the starting workflow history record.
+- Fixed Approvals app to reset editable fields when Submit is clicked.
+
 Oct 18, 2020
 [Fixes]
 - Fixed the time gap between notification being recieved about the task and task actually becoming available, by moving the step to send out the notification to the worker process. This results in the notifications arriving slightly slower - but now once the notification is recieved, the task is always ready.
