@@ -1,3 +1,44 @@
+March 9, 2021
+[Fixes]
+- Fixed a bug where special characters in user's display names could cause a failure when updating Approval Outcome and Approval Summary fields from being updated. Affected components: Worker flow.
+- Replaced notifications using Mail connector to use Outlook for O365 instead. This change was made to avoid the throttling limit of 100 emails per day per user that currently applies to the Mail connector. Affected components: Worker flow, trigger flow(s).	
+- Added a check for task status to prevent completed tasks from opening (before this fix, a task could be completed twice if the user was fast enough). Affected components: Approval get approval task by id.	
+- Fixed some connections in the Worker flow to use ppservice account (they were using a different admin-level account due to an accidental misconfiguration).
+- Fixed a cosmetic issue in Approvals app, when filled out, but not submitted values were not resetting when navigating between screens and opening different tasks. Affected components: Approvals app.
+
+[Enhancements]
+- Added version tracking label to the Approvals app (home screen) to help identify app version during side-by-side update process. Updated components: Approvals app.
+- Added description of the side-by-side update process to the deployment guide.
+- Added modified provisioning template (ApprovalLists.pnp) to enable deployment of Tasks/History lists to subsites.
+
+
+Feb 10, 2021
+[Fixes]
+- Fixed an issue with comments from re-assigning user not being displayed for "Re-assign" tasks.
+
+[Updates]
+- Added a dedicated "task not found" screen, with an explanation of why a task may no longer exist (e.g. task already completed, workflow canceled, etc.)
+
+Feb 1, 2021
+[Updates]
+- Trigger flows (Request approval and Request two-stage approval)
+	+ Added validation to trigger flows to ensure only actual users can be specified as approvers, and not email-enabled groups. If an invalid Approver is specified, the workflow will send an email to the initiator and refuse to proceed.
+	+ Added notification to workflow initiator, confirming start of the approval process. The notification is sent after all validations have been passed.
+	+ Added configurable (and optional) CCEmail value, to forward "Approval started" and "approval completed"  notifications will be forwarded
+
+- Approval worker flow
+	+ Moved all notifications to worker flow to allow tweaking for individual sites.
+	+ Modified email notifications to include direct link to the document as well as the document ID (in the email title). 
+	+ Updating document's Approval Summary and Approval Outcome fields will now be handled by the worker flow, instead of Process Approve Response. This removes requirement for the final approver to have Edit access to the document library, read-only will now suffice. Please note that this only has to do with completing approval tasks and does not change the fact that only users with read/write permissions can trigger flows on a list/library.
+
+- Approvals app
+	+ Minor UI tweaks to improve handling of long document titles.
+	
+- New fields were added to Approval Tasks list schema to accommodate the changes.
+
+- Updated deployment scripts (Create-ApprovalsRegistrySite.ps1 and ConfigureApprovals-SPOLibrary.ps1) to use cmdlets from the latest version of the PnP PowerShell module (Please refer to the following link for upgrade steps: https://pnp.github.io/powershell/articles/upgrading.html)
+
+
 Nov 27, 2020
 [Fixes]
 - Fixed a potential race condition bug, where two approval tasks submitted by two approvers at the same time would start overwriting each other's changes to the currentStateJSON value of the starting workflow history record.

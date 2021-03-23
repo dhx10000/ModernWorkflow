@@ -58,23 +58,21 @@ $web = Get-PnPWeb -Includes WebTemplate, Configuration
 $msg = "Registering Power Platform service account (" + $ppServiceAccount + ") as Site Owner."
 write-output $msg
 
-Add-PnPUserToGroup -Identity $web.AssociatedOwnerGroup -EmailAddress $ppServiceAccount
+Add-PnPGroupMember -Identity $web.AssociatedOwnerGroup -EmailAddress $ppServiceAccount
 
 $msg = "Granting Read access to Everyone except external users..."
 write-output $msg
 
-#Resolve User Name by Display Name
-$Principal = [Microsoft.SharePoint.Client.Utilities.Utility]::ResolvePrincipal($ctx, $web, "Everyone except external users", "All", "All", $Null, $True)
-$ctx.ExecuteQuery()
-$everyoneLoginName = $Principal.Value.LoginName
-
-Add-PnPUserToGroup -LoginName $everyoneLoginName -Identity $web.AssociatedVisitorGroup
+#Resolve user by Display Name
+$user = Get-PnPUser | ? {$_.Title -eq "Everyone except external users"}
+$group = Get-PnPGroup -AssociatedVisitorGroup
+Add-PnPGroupMember -Login $user.LoginName -Group $group
 
 $msg = "Creating lists: Approvals Registry, Approval Instances..."
 write-output $msg
 
 # Creating Approvals Registry list...
-Apply-PnPProvisioningTemplate -Path $templateFileName
+Invoke-PnPSiteTemplate -Path $templateFileName
 
 Disconnect-PnPOnline
 

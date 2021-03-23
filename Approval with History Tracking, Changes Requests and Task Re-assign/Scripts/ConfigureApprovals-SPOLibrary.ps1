@@ -1,6 +1,9 @@
-﻿$siteUrl = "https://m365x867142.sharepoint.com/sites/ApprovalsTest1"
+﻿#$siteUrl = "https://m365x867142.sharepoint.com/sites/ApprovalsTest1"
+$siteUrl = "https://m365x774940.sharepoint.com/sites/Approvals-TestFieldReplace2"
+
 $libName = "Documents"
-$ppServiceAccount = "ppservice@m365x867142.onmicrosoft.com"
+#$ppServiceAccount = "ppservice@m365x867142.onmicrosoft.com"
+$ppServiceAccount = "ppservice@m365x774940.onmicrosoft.com"
 
 $templateFileName = "ApprovalLists.pnp"
 
@@ -25,8 +28,7 @@ $web = Get-PnPWeb -Includes WebTemplate, Configuration
 $msg = "Registering Power Platform service account (" + $ppServiceAccount + ") as Site Owner."
 write-output $msg
 
-Add-PnPUserToGroup -Identity $web.AssociatedOwnerGroup -EmailAddress $ppServiceAccount
-
+Add-PnPGroupMember -Identity $web.AssociatedOwnerGroup -EmailAddress $ppServiceAccount
 
 $ctx = Get-PnPContext
 
@@ -82,7 +84,10 @@ $msg = "Importing template... "
 Write-Output $msg
 
 # Apply provisioning template
-Apply-PnPProvisioningTemplate -Path $templateFileName -Handlers Lists
+Invoke-PnPSiteTemplate -Path $templateFileName -Handlers Lists -Verbose
+
+# This line is for testing only, pls ignore
+#Get-PnPException
 
 $msg = "  Done."
 Write-Output $msg

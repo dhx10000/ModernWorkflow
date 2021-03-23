@@ -1,0 +1,14 @@
+﻿{
+    "SiteUrl": "https://m365x774940.sharepoint.com/sites/OPGApprovalTest2",
+    "Lists": [
+        {
+            "ListName": "Approval Tasks",
+            "FieldName": "Link"
+        },
+        {
+            "ListName": "Approval History",
+            "FieldName": "ItemURL"
+        }
+    ]
+    
+}
